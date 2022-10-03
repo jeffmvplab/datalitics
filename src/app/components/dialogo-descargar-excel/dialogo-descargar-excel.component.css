@@ -1,0 +1,17 @@
+.container-dialogo{
+  padding: 50px !important;
+}
+
+.centrar-texto {
+  text-align: center;
+}
+
+.form-error {
+  color: #f44336;
+}
+
+
+.formulario-container .mat-form-field  {
+  margin-left: 10px;
+  margin-top: 10px;
+}

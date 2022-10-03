@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  urlApi: "https://back.datalitics.com.co/",
+  urlApiCC: "https://back.datalitics.com.co/",
+  rutaJson: "./assets/data/data.json",
+  rutaPalabrasJson: "./assets/data/palabrastesauro.json"
 };
 
 /*

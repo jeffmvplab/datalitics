@@ -1,0 +1,109 @@
+<div *ngIf="(infoUsuario != null && infoUsuario.descargasRestantes == 0) || (infoUsuario != null && data.totalRegistros > infoUsuario.descargasRestantes)">
+  <h2 mat-dialog-title>Descarga</h2>
+  <div mat-dialog-content class="container-dialogo">
+    <div class="centrar-texto">
+      Superó el límite de registros gratis para descargar
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="maximo">Descargar</button>
+  </div>
+
+</div>
+
+<div *ngIf="infoUsuario != null && infoUsuario.descargasRestantes > 0 && data.totalRegistros <= infoUsuario.descargasRestantes">
+  <h2 mat-dialog-title>Se descontará {{data.totalRegistros}} registros de tus {{infoUsuario.descargasRestantes}} registros gratis</h2>
+  <div mat-dialog-content class="container-dialogo">
+    <div class="centrar-texto">
+      Tu archivo de datos empresariales está listo para descargar
+    </div>
+    <div class="centrar-texto">
+      ¿desea continuar con la descarga?
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="no">Cancelar</button>
+
+    <button mat-button mat-dialog-close="si" cdkFocusInitial>Descargar</button>
+  </div>
+
+</div>
+
+<div *ngIf="infoUsuario == null">
+  <h2 mat-dialog-title>Registro</h2>
+  <div mat-dialog-content class="formulario-container">
+    <form [formGroup]="form" id="formRegistro">
+
+      <mat-form-field appearance="legacy">
+        <mat-label for="nombre">Nombre</mat-label>
+        <input matInput placeholder="Nombre" name="nombre" id="nombre" formControlName="nombre" [(ngModel)]="nombre">
+
+        <mat-hint>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['nombre'].valid && form.controls['nombre'].hasError('maxlength') && (form.controls['nombre'].dirty || form.controls['nombre'].touched)">
+                El campo nombre supera la longitud máxima permitida
+            </p-message>
+          </div>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['nombre'].valid && (form.controls['nombre'].dirty || form.controls['nombre'].touched)">
+                El campo nombre es obligatorio
+            </p-message>
+          </div>
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label for="nombre">Correo electronico</mat-label>
+        <input matInput placeholder="Correo electronico" name="correoElectronico" id="correoElectronico" formControlName="correoElectronico" [(ngModel)]="correoElectronico">
+
+        <mat-hint>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['correoElectronico'].valid && form.controls['correoElectronico'].hasError('maxlength') && (form.controls['correoElectronico'].dirty || form.controls['correoElectronico'].touched)">
+                El campo correo electronico supera la longitud máxima permitida
+            </p-message>
+          </div>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['correoElectronico'].valid && (form.controls['correoElectronico'].dirty || form.controls['correoElectronico'].touched)">
+                El campo correo electronico es obligatorio
+            </p-message>
+          </div>
+        </mat-hint>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="legacy">
+        <mat-label for="nombre">Celular</mat-label>
+        <input matInput placeholder="Celular" name="celular" id="celular" formControlName="celular" [(ngModel)]="celular">
+
+        <mat-hint>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['celular'].valid && form.controls['celular'].hasError('maxlength') && (form.controls['celular'].dirty || form.controls['celular'].touched)">
+                El campo celular supera la longitud máxima permitida
+            </p-message>
+          </div>
+          <div class="form-error" aria-live="assertive">
+            <p-message severity="error"
+                *ngIf="!form.controls['celular'].valid && (form.controls['celular'].dirty || form.controls['celular'].touched)">
+                El campo celular es obligatorio
+            </p-message>
+          </div>
+        </mat-hint>
+      </mat-form-field>
+
+
+    </form>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="no">Cancelar</button>
+
+    <button mat-button cdkFocusInitial [disabled]="!form.valid" (click)="registrarUsuario()">Registrar</button>
+  </div>
+</div>
+
+

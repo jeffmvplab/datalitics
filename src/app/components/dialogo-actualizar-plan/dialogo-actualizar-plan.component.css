@@ -1,0 +1,14 @@
+.container-dialogo{
+  padding: 100px !important;
+}
+
+.centrar-texto {
+  text-align: center;
+}
+
+.estilo-boton {
+  background-color: #35F2DE;
+  height: 50px;
+  width: 160px;
+  padding-top: 10px;
+}

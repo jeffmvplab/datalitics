@@ -1,0 +1,122 @@
+<section mat-list-item>
+  <div class="example-label">Filtros</div>
+  <div class="example-button-row">
+    <div class="example-flex-container">
+      <div class="example-button-container">
+        <button mat-mini-fab color="primary" [disabled]="resultadosEmpresa.length == 0" aria-label="Example icon button with a menu icon" (click)="limpiarFiltro()">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section mat-list-item>
+  <div class="example-label-filtro">
+    <ul class="flex-container wrap">
+      <div *ngFor="let item of filtrosSeleccionados">
+        <li *ngIf="item.grupo == 'ventas_Netas'" class="flex-item" matTooltip="{{item.name.split('-')[0] | currency}} - {{item.name.split('-')[1] | currency}}">
+          <mat-icon style="cursor: pointer;" (click)="eliminarFiltro(item)" class="icon-display">close</mat-icon>
+          <a>{{item.name.split('-')[0] | currency}} - {{item.name.split('-')[1] | currency}}</a>
+        </li>
+        <li *ngIf="item.grupo != 'ventas_Netas'" class="flex-item" matTooltip="{{item.name}}">
+          <mat-icon style="cursor: pointer;" (click)="eliminarFiltro(item)" class="icon-display">close</mat-icon>
+          <a>{{item.name}}</a>
+        </li>
+      </div>
+
+    </ul>
+  </div>
+</section>
+
+<div *ngIf="existenCamaraComercio">
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+
+  <section mat-list-item>
+    <div class="example-label">Camara de comercio</div>
+  </section>
+  <br>
+  <section mat-list-item *ngFor="let item of filtros">
+    <div class="example-label-check" *ngIf="item.grupo == 'camara_C'">
+      <p>
+        <mat-checkbox [checked]="item.chequeado"
+          color="primary"
+          (change)="seleccionoFiltro($event.checked, item)">{{item.name}}
+        </mat-checkbox>
+      </p>
+    </div>
+  </section>
+</div>
+<div *ngIf="existenTipoPersona">
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <section mat-list-item>
+    <div class="example-label">Tipo de persona</div>
+  </section>
+  <br>
+  <section mat-list-item *ngFor="let item of filtros">
+    <div class="example-label-check" *ngIf="item.grupo == 'tipo_Persona'">
+      <p>
+        <mat-checkbox [checked]="item.chequeado"
+        color="primary"
+        (change)="seleccionoFiltro($event.checked, item)">{{item.name}}</mat-checkbox>
+      </p>
+    </div>
+  </section>
+</div>
+<div *ngIf="existenCategoria">
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <section mat-list-item>
+    <div class="example-label">Categoría</div>
+  </section>
+  <br>
+  <section mat-list-item *ngFor="let item of filtros">
+    <div class="example-label-check" *ngIf="item.grupo == 'categoria'">
+      <p>
+        <mat-checkbox [checked]="item.chequeado"
+        color="primary"
+        (change)="seleccionoFiltro($event.checked, item)">{{item.name}}</mat-checkbox>
+      </p>
+    </div>
+  </section>
+</div>
+
+<div *ngIf="existenPersonal">
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <section mat-list-item>
+    <div class="example-label">Personal</div>
+  </section>
+  <div class="custom-slider">
+    <ngx-slider
+      [(value)]="minValuePersonal"
+      [(highValue)]="maxValuePersonal"
+      [options]="optionsPersonal"
+      (userChange)="onUserChangePersonal($event)">
+    </ngx-slider>
+  </div>
+</div>
+
+<div *ngIf="existenVentasNetas">
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <section mat-list-item>
+    <div class="example-label">Ventas Netas</div>
+  </section>
+  <div class="custom-slider">
+    <ngx-slider
+      [(value)]="minValueVentasNetas"
+      [(highValue)]="maxValueVentasNetas"
+      [options]="optionsVentasNetas"
+      (userChange)="onUserChangeVentasNetas($event)">
+    </ngx-slider>
+  </div>
+</div>
+

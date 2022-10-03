@@ -1,0 +1,200 @@
+<mat-progress-bar mode="indeterminate" *ngIf="mostrarProgresBar">
+
+</mat-progress-bar>
+
+
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">flare</mat-icon>
+      Clientes potenciales
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">contacts</mat-icon>
+      Contactos
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">highlight</mat-icon>
+      Asesoría
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+      Herramientas
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<br>
+
+<mat-accordion class="example-headers-align" multi >
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header >
+      <mat-panel-title>
+        Buscar en datalitics
+      </mat-panel-title>
+      <mat-panel-description>
+          Tu búsqueda: {{palabraclave}} {{labelDepartamento | titlecase }} {{labelCiudad | titlecase }}
+        <mat-icon>ballot</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="example-container">
+      <form [formGroup]="form" id="formPregunta">
+
+        <mat-form-field appearance="legacy">
+          <mat-label for="palabraclave">Ej: restaurantes</mat-label>
+          <input matInput placeholder="Escribe el sector o industria" name="palabraclave" id="palabraclave" formControlName="palabraclave" [(ngModel)]="palabraclave">
+
+          <mat-hint>
+            <div class="form-error" aria-live="assertive">
+              <p-message severity="error"
+                  *ngIf="!form.controls['palabraclave'].valid && form.controls['palabraclave'].hasError('maxlength') && (form.controls['palabraclave'].dirty || form.controls['palabraclave'].touched)">
+                  El campo sector o industria supera la longitud máxima permitida
+              </p-message>
+            </div>
+            <div class="form-error" aria-live="assertive">
+              <p-message severity="error"
+                  *ngIf="!form.controls['palabraclave'].valid && (form.controls['palabraclave'].dirty || form.controls['palabraclave'].touched)">
+                  El campo sector o industria es obligatorio
+              </p-message>
+            </div>
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label for="departamento">Departamento</mat-label>
+          <mat-select name="departamento" id="departamento"
+            formControlName="departamento" [(ngModel)]="departamento"
+            (selectionChange)="seleccionarDepartamento($event)">
+            <mat-option value="">Seleccione</mat-option>
+            <mat-option value="{{departamento.id}}" *ngFor="let departamento of listaDepartamentos">{{departamento.descripcion | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label for="ciudad">Ciudad</mat-label>
+          <mat-select name="ciudad" id="ciudad" formControlName="ciudad" [(ngModel)]="ciudad"
+          (selectionChange)="seleccionarCiudad($event)">
+            <mat-option value="">Seleccione</mat-option>
+            <mat-option value="{{ciudad.id}}" *ngFor="let ciudad of listaCiudad">{{ciudad.descripcion | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button [disabled]="!form.valid"  mat-raised-button color="primary" (click)="buscarEmpresas()">Buscar empresas</button>
+
+      </form>
+
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+<br>
+
+<mat-card>
+  <mat-card-content>
+
+    <mat-form-field appearance="legacy" class="mat-form-search">
+      <mat-label>Filtrar por nombre de empresa</mat-label>
+      <input [disabled]="dataSource == undefined" matInput placeholder="Si desea buscar una empresa en específico, digite razón social" (keyup)="buscarEmpresa($event)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div>
+      <button [disabled]="!blnMostrarMensaje" mat-raised-button color="primary" (click)="exportarExcel()">
+        Exportar Excel &nbsp;&nbsp;
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+    </div>
+    <br>
+    <div *ngIf="blnMostrarMensaje">
+      <mat-panel-title>
+        Hemos encontrado {{numRegistrosEncontrados}} empresas potenciales, si quieres encontrar más de 5000 empresas como estas, actualiza tu plan.
+      </mat-panel-title>
+      <br>
+    </div>
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matTableExporter #exporter="matTableExporter" >
+
+        <ng-container matColumnDef="razonSocial">
+          <th mat-header-cell *matHeaderCellDef> Razón Social </th>
+          <td mat-cell *matCellDef="let element" >
+            <div>
+              {{element.razon_Social}}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ciudadMpio">
+          <th mat-header-cell *matHeaderCellDef> Ciudad </th>
+          <td mat-cell *matCellDef="let element" >
+            <div>
+              {{element.ciudad_Mpio}}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sector">
+          <th mat-header-cell *matHeaderCellDef> Sector </th>
+          <td mat-cell *matCellDef="let element" >
+            <div>
+              {{element.descripcionCIIU_1}}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let element" >
+            <div>
+              {{element.tipo_Persona}}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ventas">
+          <th mat-header-cell *matHeaderCellDef> Ventas </th>
+          <td mat-cell *matCellDef="let element" >
+            <div>
+              {{element.ventas_Netas | currency }}
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+      </mat-paginator>
+
+    </div>
+
+  </mat-card-content>
+
+
+  <br>
+
+</mat-card>
+
+<div class="loading-screen-wrapper" *ngIf="mostrarProgresBar">
+  <div class="loading-screen-icon">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="loading-screen-text">
+    Estamos buscando tus clientes potenciales dentro de más 2.5 millones de empresas
+  </div>
+</div>
+
